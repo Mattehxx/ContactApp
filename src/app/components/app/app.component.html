@@ -1,0 +1,67 @@
+<h1>{{ title }}</h1>
+
+<div class="contacts-container">
+	<button *ngIf="!isAddPanelVisible" (click)="toggleAddPanel()" class="add-btn">+</button>
+
+	<!-- Start :: add-panel -->
+	<div *ngIf="isAddPanelVisible && contactToAdd" class="add-panel">
+		<div class="edit-field">
+			<label>Name: </label> <input type="text" title="Name" [(ngModel)]="contactToAdd.name"/>
+		</div>
+		<div class="edit-field">
+			<label>Surname: </label> <input type="text" title="Surname" [(ngModel)]="contactToAdd.surname"/>
+		</div>
+		<div class="edit-field">
+			<label>Age: </label> <input type="number" title="Age" [(ngModel)]="contactToAdd.age"/>
+		</div>
+		<div class="edit-field">
+			<label>Phone number: </label> <input type="text" title="Phone number" [(ngModel)]="contactToAdd.phoneNumber"/>
+		</div>
+		<button (click)="aggiungiContatto()" class="card-btn">Aggiungi</button>
+		<button (click)="toggleAddPanel()" class="card-btn">Annulla</button>
+	</div>
+	<!-- End :: add-panel -->
+
+	<!-- Start :: contact-card -->
+	<div class="contact-card" *ngFor="let contact of contacts">
+		<!-- Start :: contact-card-view -->
+		<div *ngIf="contact.isViewMode" class="contact-card-view">
+			<div class="view-field">
+				<label>Name: </label> <div class="field">{{ contact.name }}</div>
+			</div>
+			<div class="view-field">
+				<label>Surname: </label> <div class="field">{{ contact.surname }}</div>
+			</div>
+			<div class="view-field">
+				<label>Age: </label> <div class="field">{{ contact.age }}</div>
+			</div>
+			<div class="view-field">
+				<label>Phone number: </label> <div class="field">{{ contact.phoneNumber }}</div>
+			</div>
+			
+			<button *ngIf="this.isViewMode" (click)="toggleViewMode(contact)" class="card-btn">Modifica</button>
+			<button *ngIf="this.isViewMode" (click)="eliminaContatto(contact)" class="card-btn">Elimina</button>
+		</div>
+		<!-- End :: contact-card-view -->
+
+		<!-- Start :: contact-card-edit -->
+		<div *ngIf="!contact.isViewMode && contactToEdit" class="contact-card-edit">
+			<div class="edit-field">
+				<label>Name: </label> <input type="text" title="Name" [(ngModel)]="contactToEdit.name"/>
+			</div>
+			<div class="edit-field">
+				<label>Surname: </label> <input type="text" title="Surname" [(ngModel)]="contactToEdit.surname"/>
+			</div>
+			<div class="edit-field">
+				<label>Age: </label> <input type="number" title="Age" [(ngModel)]="contactToEdit.age"/>
+			</div>
+			<div class="edit-field">
+				<label>Phone number: </label> <input type="text" title="Phone number" [(ngModel)]="contactToEdit.phoneNumber"/>
+			</div>
+			<button (click)="salvaContatto(contact)" class="card-btn">Salva</button>
+			<button (click)="toggleViewMode(contact)" class="card-btn">Annulla</button>
+		</div>
+		<!-- End :: contact-card-edit -->
+	</div>
+	<!-- End :: contact-card -->
+</div>

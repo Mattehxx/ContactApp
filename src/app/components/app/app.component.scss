@@ -1,0 +1,43 @@
+label {
+    display: inline-block;
+    min-width: 8rem;
+}
+
+.contact-card {
+    border: 1px solid black;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.add-panel {
+    border: 1px solid black;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.field {
+    font-style: italic;
+    font-weight: bold;
+    display: inline;
+}
+
+.view-field {
+    padding: 0.5rem;
+}
+
+.edit-field {
+    padding: 0.5rem;
+}
+
+.card-btn {
+    margin-top: 0.5rem;
+    margin-right: 0.4rem;
+    padding: 0.2rem;
+}
+
+.add-btn {
+    padding: 0.2rem;
+    min-width: 1.6rem;
+    margin-bottom: 0.5rem;
+}
