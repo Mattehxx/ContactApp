@@ -1,6 +1,36 @@
 <h1>{{ title }}</h1>
 
-<div class="contacts-container">
+<div *ngIf="!isLogged">
+	<div *ngIf="isloginView" class="login-container">
+		<div class="login-field">
+			<label>Username: </label> <input type="text" title="Username" [(ngModel)]="loginUser!.username" required>
+		</div>
+		<div class="login-field">
+			<label>Password: </label> <input type="password" title="Password" [(ngModel)]="loginUser!.password" required>
+		</div>
+		<button (click)="isloginView = false;">Go to register</button>
+		<button class="btn-login" (click)="login()">Login</button>
+	</div>
+
+	<div *ngIf="!isloginView" class="register-container">
+		<div class="register-field">
+			<label>Username: </label> <input type="text" title="Username" [(ngModel)]="registerUser!.username" required>
+		</div>
+		<div class="register-field">
+			<label>Email: </label> <input type="email" title="Email" [(ngModel)]="registerUser!.email" required>
+		</div>
+		<div class="register-field">
+			<label>Password: </label> <input type="password" title="Password" [(ngModel)]="registerUser!.password" required>
+		</div>
+		<div class="register-field">
+			<label>Confirm password: </label> <input type="password" title="Confirm password" [(ngModel)]="registerUser!.confirmPassword" required>
+		</div>
+		<button (click)="isloginView = true;">Go to login</button>
+		<button class="btn-register" (click)="register()">Register</button>
+	</div>
+</div>
+
+<div *ngIf="isLogged" class="contacts-container">
 	<button *ngIf="!isAddPanelVisible" (click)="toggleAddPanel()" class="add-btn">+</button>
 
 	<!-- Start :: add-panel -->

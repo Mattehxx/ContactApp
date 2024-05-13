@@ -3,11 +3,15 @@ import { RouterOutlet } from '@angular/router';
 import { contact } from '../../models/contact';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ContattiService } from '../../services/contatti.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { AuthService } from '../../services/auth.service';
+import { login, register } from '../../models/auth.model';
 
 @Component({
 	selector: 'app-root',
 	standalone: true,
-	imports: [RouterOutlet, CommonModule, FormsModule],
+	imports: [RouterOutlet, CommonModule, FormsModule, HttpClientModule],
 	templateUrl: './app.component.html',
 	styleUrl: './app.component.scss'
 })
@@ -18,9 +22,28 @@ export class AppComponent {
 	contactToAdd: contact | undefined;
 	isViewMode = true;
 	isAddPanelVisible = false;
+	loginUser: login | undefined;
+	isLogged: boolean;
+	isloginView = true;
+	registerUser: register;
 
-	constructor() {
-		this.contacts = [
+	constructor(public _cs: ContattiService, public _as: AuthService) {
+		this.isLogged = _as.isUserLogged();
+		if(!this.isLogged) {
+			this.loginUser = {
+				username: '',
+				password: ''
+			}
+		}
+		this.registerUser = {
+			username: '',
+			email: '',
+			password: '',
+			confirmPassword: ''
+		}
+
+		this.contacts = [];
+		/* this.contacts = [
 			{
 				name: 'Matteo',
 				surname: 'Rovellini',
@@ -42,12 +65,39 @@ export class AppComponent {
 				phoneNumber: '+39 3332785416',
 				isViewMode: true
 			}
-		];
+		]; */
+
+		this._cs.getAll().subscribe({
+			next: (contattiArray) => {
+				//quì ci sarà la response della chiamata http
+				this.contacts = contattiArray.map(p => {
+					p.isViewMode = true;
+					return p;
+				});
+			} 
+		})
+	}
+
+	login() {
+		this._as.login(this.loginUser!).subscribe({
+			next: () => {
+				this.isLogged = true;
+			}
+		});
+	}
+
+	register() {
+		this._as.register(this.registerUser).subscribe({
+			next: () => {
+				this.isloginView = true;
+			}
+		})
 	}
 
 	toggleViewMode(contatto: contact) {
 		if(this.isViewMode) {
 			this.contactToEdit = {
+				id: contatto.id,
 				name: contatto.name,
 				surname: contatto.surname,
 				age: contatto.age,
@@ -67,6 +117,7 @@ export class AppComponent {
 			this.contactToAdd = undefined;
 		} else {
 			this.contactToAdd = {
+				id: "",
 				name: '',
 				surname: '',
 				age: 18,
@@ -79,26 +130,43 @@ export class AppComponent {
 	}
 
 	salvaContatto(contatto: contact) {
-		contatto.name = this.contactToEdit!.name;
-		contatto.surname = this.contactToEdit!.surname;
-		contatto.age = this.contactToEdit!.age;
-		contatto.phoneNumber = this.contactToEdit!.phoneNumber;
-		this.toggleViewMode(contatto);
+		this._cs.put(this.contactToEdit!).subscribe({
+			next: () => {
+				contatto.id = this.contactToEdit!.id;
+				contatto.name = this.contactToEdit!.name;
+				contatto.surname = this.contactToEdit!.surname;
+				contatto.age = this.contactToEdit!.age;
+				contatto.phoneNumber = this.contactToEdit!.phoneNumber;
+				this.toggleViewMode(contatto);
+			}
+		});
 	}
 
 	eliminaContatto(contatto: contact) {
-		this.contacts.splice(this.contacts.indexOf(contatto), 1);
+		this._cs.delete(contatto).subscribe({
+			next: (model) => {
+				this.contacts.splice(this.contacts.findIndex(c => c.id == model.id), 1);
+			}
+		});
 	}
 
 	aggiungiContatto() {
-		this.contacts.push({
-			name: this.contactToAdd!.name,
-			surname: this.contactToAdd!.surname,
-			age: this.contactToAdd!.age,
-			phoneNumber: this.contactToAdd!.phoneNumber,
-			isViewMode: true
+		this._cs.post(this.contactToAdd!).subscribe({
+			next: (model) => {
+				this.contacts.push({
+					id: this.contactToAdd!.id,
+					name: this.contactToAdd!.name,
+					surname: this.contactToAdd!.surname,
+					age: this.contactToAdd!.age,
+					phoneNumber: this.contactToAdd!.phoneNumber,
+					isViewMode: true
+				});
+		
+				this.toggleAddPanel();
+			},
+			error: (error) => {
+				console.error(error);
+			}
 		});
-
-		this.toggleAddPanel();
 	}
 }
