@@ -1,0 +1,11 @@
+<div class="contact-container">
+    <h3 *ngIf="contact.contactId === 0">Add a new contact!</h3>
+    <span class="contact-field">Name: <input type="text" class="form-control" [(ngModel)]="contact.name" [disabled]="!isInEdit"></span>
+    <span class="contact-field">Surname: <input type="text" class="form-control" [(ngModel)]="contact.surname" [disabled]="!isInEdit"></span>
+    <span class="contact-field">Phone number: <input type="text" class="form-control" [(ngModel)]="contact.phone" [disabled]="!isInEdit"></span>
+    <span class="contact-field">Age: <input type="text" class="form-control" [(ngModel)]="contact.age" [disabled]="!isInEdit"></span>
+    <div class="d-flex flex-row justify-content-end gap-2">
+        <button class="btn btn-sm btn-primary" (click)="toggleViewMode()">{{ isInEdit ? 'Save' : 'Edit' }}</button>
+        <button class="btn btn-sm btn-secondary" (click)="removeContact()">{{ isInEdit ? 'Back' : 'Remove' }}</button>
+    </div>
+</div>

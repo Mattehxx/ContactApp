@@ -1,0 +1,11 @@
+.contact-field {
+    border: 0.1rem inset #50a8ff;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.contact-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
