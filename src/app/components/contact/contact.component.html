@@ -6,6 +6,6 @@
     <span class="contact-field">Age: <input type="text" class="form-control" [(ngModel)]="contact.age" [disabled]="!isInEdit"></span>
     <div class="d-flex flex-row justify-content-end gap-2">
         <button class="btn btn-sm btn-primary" (click)="toggleViewMode()">{{ isInEdit ? 'Save' : 'Edit' }}</button>
-        <button class="btn btn-sm btn-secondary" (click)="removeContact()">{{ isInEdit ? 'Back' : 'Remove' }}</button>
+        <button class="btn btn-sm btn-secondary" (click)="removeContact()" *ngIf="contact.contactId !== 0">{{ isInEdit ? 'Back' : 'Remove' }}</button>
     </div>
 </div>
