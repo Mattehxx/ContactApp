@@ -6,19 +6,24 @@ import { HttpClientModule } from '@angular/common/http';
 import { ContactComponent } from "../contact/contact.component";
 import { Subject } from 'rxjs';
 import { Condition, QueryFilterComponent } from "../query-filter/query-filter.component";
+import { HighlightDirective } from '../../directives/highlight.directive';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, HttpClientModule, ContactComponent, QueryFilterComponent],
+  imports: [RouterOutlet, CommonModule, HttpClientModule, ContactComponent, QueryFilterComponent, HighlightDirective],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit, OnChanges, DoCheck, OnDestroy, AfterContentInit, AfterContentChecked, AfterViewInit, AfterViewChecked {
   private _name = 'AppComponent';
+  get name() { return this._name; }
+  private _appColor = 'red';
+  get appColor() { return this._appColor; }
   private _dontDie$: Subject<void> = new Subject();
 
   public cs = inject(ContactsService);
+  public appFilter: Condition = [];
 
   applyFilterOnApp(filter: Condition) {
     console.log(filter);
@@ -30,7 +35,7 @@ export class AppComponent implements OnInit, OnChanges, DoCheck, OnDestroy, Afte
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(`${this._name} - On Changes`);
+    console.log(`${this._name} - On Changes`, changes);
   }
 
   ngDoCheck(): void {

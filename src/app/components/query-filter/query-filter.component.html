@@ -1,5 +1,8 @@
 <div class="contact-container contact-list-container">
-    <h3>Filters</h3>
+    <h3>Contacts filters</h3>
     <dx-filter-builder [fields]="fields" [(value)]="filter"></dx-filter-builder>
-    <button class="btn btn-sm btn-primary" (click)="applyFilter()">Apply</button>
+    <div class="d-flex flex-row justify-content-between">
+        <button class="btn btn-sm btn-secondary" (click)="loadFilter()">Load existing filter</button>
+        <button class="btn btn-sm btn-primary" (click)="applyFilter()">Apply</button>
+    </div>
 </div>
