@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContactsService } from '../../services/contacts.service';
 import { Subject } from 'rxjs';
+import { ExponentialPipe } from '../../pipes/exponential.pipe';
 
 @Component({
 	selector: 'app-contact',
 	standalone: true,
-	imports: [CommonModule, FormsModule],
+	imports: [CommonModule, FormsModule, ExponentialPipe],
 	templateUrl: './contact.component.html',
 	styleUrl: './contact.component.scss'
 })

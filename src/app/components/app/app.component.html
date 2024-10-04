@@ -1,9 +1,9 @@
 <div class="app-container">
-	<h1 [appHighlight]="appColor">{{ name }}</h1>
+	<h1 class="contact-list-container d-inline-block" [appHighlight]="appColor">{{ name }}</h1>
 	<div class="contact-list-container">
 		<app-contact [isInEdit]="true"></app-contact>
 	</div>
-	<app-query-filter [filter]="appFilter" (apply)="applyFilterOnApp($event)"></app-query-filter>
+	<app-query-filter class="d-inline-block" [filter]="appFilter" (apply)="applyFilterOnApp($event)"></app-query-filter>
 	<div *ngFor="let item of cs.contacts$ | async" class="contact-list-container">
 		<app-contact [contact]="item"></app-contact>
 	</div>

@@ -1,11 +1,37 @@
 <div class="contact-container">
     <h3 *ngIf="contact.contactId === 0">Add a new contact!</h3>
-    <span class="contact-field">Name: <input type="text" class="form-control" [(ngModel)]="contact.name" [disabled]="!isInEdit"></span>
-    <span class="contact-field">Surname: <input type="text" class="form-control" [(ngModel)]="contact.surname" [disabled]="!isInEdit"></span>
-    <span class="contact-field">Phone number: <input type="text" class="form-control" [(ngModel)]="contact.phone" [disabled]="!isInEdit"></span>
-    <span class="contact-field">Age: <input type="text" class="form-control" [(ngModel)]="contact.age" [disabled]="!isInEdit"></span>
-    <div class="d-flex flex-row justify-content-end gap-2">
-        <button class="btn btn-sm btn-primary" (click)="toggleViewMode()">{{ isInEdit ? 'Save' : 'Edit' }}</button>
-        <button class="btn btn-sm btn-secondary" (click)="removeContact()" *ngIf="contact.contactId !== 0">{{ isInEdit ? 'Back' : 'Remove' }}</button>
-    </div>
+    <form #contactForm="ngForm" (ngSubmit)="toggleViewMode()">
+        <div class="contact-field">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-control" 
+                name="name" title="name" #name="ngModel" 
+                [(ngModel)]="contact.name" [disabled]="!isInEdit" 
+                required>
+            <div class="validation-contanier mt-2">
+                <div class="validation-item required alert alert-danger" [hidden]="name.valid || name.pristine">
+                    Name required
+                </div>
+            </div>
+        </div>
+        <div class="contact-field">
+            <label class="form-label">Surname</label>
+            <input type="text" class="form-control" name="surname" title="surname" required [(ngModel)]="contact.surname" [disabled]="!isInEdit">
+        </div>
+        <div class="contact-field">
+            <label class="form-label">Phone number</label>
+            <input type="text" class="form-control" name="phone" title="phone" required [(ngModel)]="contact.phone" [disabled]="!isInEdit">
+        </div>
+        <div class="contact-field">
+            <label class="form-label">Age</label>
+            <input type="text" class="form-control" name="age" title="age" required [(ngModel)]="contact.age" [disabled]="!isInEdit">
+        </div>
+        <div class="contact-field">
+            <label class="form-label">Exponential age</label>
+            <input type="text" class="form-control" name="exponentialAge" title="exponentialAge" [value]="contact.age | exponential:2" disabled>
+        </div>
+        <div class="d-flex flex-row justify-content-end gap-2">
+            <button type="submit" class="btn btn-sm btn-outline-primary">{{ isInEdit ? 'Save' : 'Edit' }}</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="removeContact()" *ngIf="contact.contactId !== 0">{{ isInEdit ? 'Back' : 'Remove' }}</button>
+        </div>
+    </form>
 </div>
