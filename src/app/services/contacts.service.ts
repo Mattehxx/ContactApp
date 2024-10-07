@@ -11,6 +11,7 @@ export class ContactsService {
 	private _env = 'https://localhost:7023/api/Contact/';
 
 	public contacts$ = new BehaviorSubject<Array<Contact>>([]);
+	public updated$: Subject<void> = new Subject<void>();
 
 	get(dontDie$: Subject<void>) {
 		this._http.get<Array<Contact>>(`${this._env}`)
@@ -33,6 +34,7 @@ export class ContactsService {
 			.pipe(takeUntil(dontDie$))
 			.subscribe((res) => {
 				this.contacts$.value.push(res);
+				this.updated$.next();
 			});
 	}
 
@@ -42,6 +44,7 @@ export class ContactsService {
 			.subscribe((res) => {
 				let oldContact = this.contacts$.value.find(c => c.contactId === model.contactId);
 				oldContact = res;
+				this.updated$.next();
 			});
 	}
 

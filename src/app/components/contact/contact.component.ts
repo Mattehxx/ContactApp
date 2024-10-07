@@ -1,15 +1,16 @@
 import { AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, Component, DoCheck, inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { Contact } from '../../models/contact.model';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { ContactsService } from '../../services/contacts.service';
-import { Subject } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { ExponentialPipe } from '../../pipes/exponential.pipe';
+import { ForbiddenNamesDirective } from '../../directives/forbidden-names.directive';
 
 @Component({
 	selector: 'app-contact',
 	standalone: true,
-	imports: [CommonModule, FormsModule, ExponentialPipe],
+	imports: [CommonModule, FormsModule, ExponentialPipe, ForbiddenNamesDirective],
 	templateUrl: './contact.component.html',
 	styleUrl: './contact.component.scss'
 })
@@ -23,8 +24,9 @@ export class ContactComponent implements OnInit, OnChanges, DoCheck, OnDestroy, 
 		contactId: 0,
 		name: '',
 		surname: '',
-		age: 0,
-		phone: ''
+		phone: '',
+		email: '',
+		age: 0
 	};
 	@Input()
 	isInEdit: boolean = false;
@@ -62,23 +64,29 @@ export class ContactComponent implements OnInit, OnChanges, DoCheck, OnDestroy, 
 		console.log(`${this._name} - After View Checked`);
 	}
 
-	toggleViewMode() {
-		if (this.isInEdit) this.saveModification();
-		if (this.contact.contactId !== 0) this.isInEdit = !this.isInEdit;
+	toggleViewMode(form: NgForm) {
+		if (this.isInEdit) {
+			this.saveModification();
+		}
+		if (this.contact.contactId !== 0) {
+			this.isInEdit = !this.isInEdit;
+		} else {
+			form.reset();
+		}
 	}
 
 	saveModification() {
+		// this._cs.updated$.pipe(takeUntil(this._dontDie$)).subscribe({
+		// 	next: () => {
+				
+		// 	}
+		// });
+
 		if (this.contact.contactId === 0) {
 			this._cs.create(this._dontDie$, this.contact);
-			this.contact = {
-				contactId: 0,
-				name: '',
-				surname: '',
-				age: 0,
-				phone: ''
-			};
+		} else {
+			this._cs.update(this._dontDie$, this.contact);
 		}
-		this._cs.update(this._dontDie$, this.contact);
 	}
 
 	removeContact() {
